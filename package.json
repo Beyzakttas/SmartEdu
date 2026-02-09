@@ -4,7 +4,7 @@
   "description": "education portal",
   "main": "app.js",
   "scripts": {
-    "test": "start project"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -14,10 +14,16 @@
     "education",
     "panel"
   ],
-  "author": "",
+  "author": "Beyza Aktas",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Beyzakttas/SmartEdu/issues"
   },
-  "homepage": "https://github.com/Beyzakttas/SmartEdu#readme"
+  "homepage": "https://github.com/Beyzakttas/SmartEdu#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
 }
