@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Beyzakttas/SmartEdu#readme",
   "dependencies": {
+    "ejs": "^4.0.1",
     "express": "^5.2.1"
   },
   "devDependencies": {
