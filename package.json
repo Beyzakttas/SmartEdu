@@ -1,0 +1,23 @@
+{
+  "name": "smartedu",
+  "version": "1.0.0",
+  "description": "education portal",
+  "main": "app.js",
+  "scripts": {
+    "test": "start project"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Beyzakttas/SmartEdu.git"
+  },
+  "keywords": [
+    "education",
+    "panel"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Beyzakttas/SmartEdu/issues"
+  },
+  "homepage": "https://github.com/Beyzakttas/SmartEdu#readme"
+}
