@@ -27,6 +27,10 @@ const CourseSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
   },
+  user:{
+   type: mongoose.Schema.Types.ObjectId,
+  ref:'User'
+  }
 });
 
 // Kayıt oluşturulmadan veya güncellenmeden önce slug oluşturma

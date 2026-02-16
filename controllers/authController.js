@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const Category = require('../models/Category');
+const Course = require('../models/Course');
 
 exports.createUser = async (req, res) => {
   try {
@@ -16,21 +18,16 @@ exports.createUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
 
     if (user) {
       const isSame = await bcrypt.compare(password, user.password);
 
       if (isSame) {
-        // OTURUM VERİSİNİ ATA
         req.session.userID = user._id;
-
-        // KRİTİK: Session'ı kaydet ve bittikten sonra yönlendir
         req.session.save(() => {
           res.status(200).redirect('/users/dashboard');
         });
-        
       } else {
         res.status(400).send('Şifreniz hatalı!');
       }
@@ -44,17 +41,30 @@ exports.loginUser = async (req, res) => {
     });
   }
 };
+
 exports.logoutUser = (req, res) => {
   req.session.destroy(() => {
-    res.redirect('/'); // Oturum silindikten sonra ana sayfaya gönder
+    res.redirect('/'); 
   });
 };
-exports.logoutUser =(req, res) =>{
-req.session.destroy(()=> {
-res.redirect('/');})}
-exports.getDashboardPage = async (req, res)=> {
-  const user=await User.findOne({_id:req.session.userID})
-res.status(200).render('dashboard', {
-page_name: 'dashboard',
-user
-});};
+
+exports.getDashboardPage = async (req, res) => {
+  try {
+    // KRİTİK GÜNCELLEME: .populate('courses') ekledik. 
+    // Böylece öğrencinin kayıt olduğu kursların detayları (isim, açıklama vb.) gelecek.
+    const user = await User.findOne({ _id: req.session.userID }).populate('courses');
+    const categories = await Category.find();
+    
+    // Öğretmen ise sadece kendi oluşturduğu kursları getir
+    const courses = await Course.find({ user: req.session.userID });
+
+    res.status(200).render('dashboard', {
+      page_name: 'dashboard',
+      user,
+      categories,
+      courses
+    });
+  } catch (error) {
+    res.status(400).redirect('/login');
+  }
+};

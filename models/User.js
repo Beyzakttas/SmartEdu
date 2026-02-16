@@ -15,23 +15,30 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
-  }
+  },
+  role: {
+    type: String,
+    enum: ["student", "teacher", "admin"],
+    default: "student"
+  },
+  // KURS-ÖĞRENCİ İLİŞKİSİ İÇİN EKLENEN ALAN
+  courses: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course' // Course modeline referans veriyoruz
+  }]
 });
 
-// 'next' parametresini kaldırdık, async yapı kendi akışını yönetir
+// Şifre şifreleme middleware'i (Aynı kalıyor)
 UserSchema.pre('save', async function () {
     const user = this;
-
-    // Şifre değişmediyse fonksiyondan çık (kaydetmeye devam eder)
     if (!user.isModified('password')) return;
 
     try {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(user.password, salt);
         user.password = hash;
-        // next() çağırmaya gerek yok, async tamamlanınca otomatik ilerler
     } catch (err) {
-        throw err; // Hata varsa fırlat, controller'daki catch bunu yakalar
+        throw err;
     }
 });
 

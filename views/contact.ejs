@@ -1,0 +1,56 @@
+<%- include('partials/_header');%>
+<%- include('partials/_navigation');%>
+    
+    <div class="all-title-box">
+        <div class="container text-center">
+            <h1>Contact<span class="m_1">Bizimle dilediğiniz zaman iletişime geçebilirsiniz.</span></h1>
+        </div>
+    </div>
+    
+    <div id="contact" class="section wb">
+        <div class="container">
+            <div class="section-title text-center">
+                <h3>Need Help? Sure we are Online!</h3>
+                <p class="lead">Lütfen aşağıdaki formu doldurun. En kısa sürede size geri dönüş yapacağız!</p>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12">
+
+                    <% if (flashMessages) { %>
+                        <% if (flashMessages.success) { %>
+                            <div class="alert alert-success">
+                                <%= flashMessages.success %>
+                            </div>
+                        <% } else if (flashMessages.error) { %>
+                            <div class="alert alert-danger">
+                                <%= flashMessages.error %>
+                            </div>
+                        <% } %>
+                    <% } %>
+
+                    <div class="contact_form">
+                        <div id="message"></div>
+                        <form id="contactform" action="/contact" method="POST">
+                            <div class="row row-fluid">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" name="name" id="first_name" class="form-control" placeholder="Name" required>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Your Email" required>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <textarea class="form-control" name="message" id="comments" rows="6" placeholder="Give us more details.." required></textarea>
+                                </div>
+                                <div class="text-center pd">
+                                    <button type="submit" value="SEND" id="submit" class="btn btn-light btn-radius btn-brd grd1 btn-block">SEND MESSAGE</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/_footer');%>
