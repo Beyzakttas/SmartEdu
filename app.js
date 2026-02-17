@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const User = require('./models/User'); 
+const methodOverride = require('method-override');
 
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
@@ -24,6 +25,13 @@ app.use(express.static('public'));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
+// ... diğer middleware'ler
+
+app.use(
+  methodOverride('_method', {
+    methods: ['POST', 'GET'],
+  })
+);
 // 4. Session Kurulumu (KRİTİK: Flash'tan ÖNCE burada olmalı)
 app.use(session({
   secret: 'my_keyboard_cat',

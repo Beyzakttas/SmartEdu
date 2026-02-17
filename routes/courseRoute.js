@@ -18,4 +18,11 @@ router.route('/release').post(courseController.releaseCourse);
 // TEKİL KURS SAYFASI
 router.route('/:slug').get(courseController.getCourse); 
 
+// :slug parametresi, gönderdiğin 'c' (veya kursun adı) değerini yakalar
+router.route('/:slug').delete(courseController.deleteCourse);
+// Method-override sayesinde .put kullanabiliyoruz
+router.route('/:slug').put(courseController.updateCourse);
+// Sadece öğretmen ve admin kurs silebilir/güncelleyebilir
+router.route('/:slug').delete(roleMiddleware(["teacher", "admin"]), courseController.deleteCourse);
+router.route('/:slug').put(roleMiddleware(["teacher", "admin"]), courseController.updateCourse);
 module.exports = router;
