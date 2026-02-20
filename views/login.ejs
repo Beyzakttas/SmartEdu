@@ -1,32 +1,83 @@
+<%- include('partials/_header') %>
+<%- include('partials/_navigation') %>
 
-	<%- include('partials/_header');%>
-<%- include('partials/_navigation');%>
+<style>
+    /* Form kutusunu bembeyaz ve zarif yapar */
+    .contact_form {
+        background-color: #ffffff !important;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 25px rgba(0,0,0,0.05);
+        border: 1px solid #f1f1f1;
+    }
+    
+    /* Butonun orijinal boyutları ve turuncu rengi */
+    .hover-btn-new.orange {
+        background: #eea412 !important;
+        border: 1px solid #eea412 !important;
+        color: #ffffff !important;
+        transition: all 0.3s ease;
+        padding: 10px 30px !important; /* Eski zarif boyut */
+        display: inline-block;
+    }
 
-	        <div class="container">
-            <div class="section-title text-center">
-                <h3 class="mt-5">LOGIN</h3>
+    /* Üzerine gelince siyah olma efekti */
+    .hover-btn-new.orange:hover {
+        background: #333333 !important;
+        border-color: #333333 !important;
+        color: #ffffff !important;
+    }
 
-            <div class="row">
-                <div class="col-xl-12 col-md-12 col-sm-12">
-                    <div class="contact_form">
-                        <div id="message"></div>
-                       <form class="" name="contactform" method="post" action="/users/login">
-    <div class="row row-fluid">
-        <div class="offset-1 col-lg-10 col-md-10 col-sm-10">
-            <input type="email" name="email" id="email" class="form-control" placeholder="Email">
-        </div>
-        <div class="offset-1 col-lg-10 col-md-10 col-sm-10">
-            <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-        </div>
+    /* Arka plandaki koyuluğu temizler */
+    .section.lb {
+        background-color: #fcfcfc !important;
+    }
+</style>
 
-        <div class="offset-1 col-lg-10 col-md-10 col-sm-10">
-            <button type="submit" value="LOGIN" id="submit" class="btn btn-light btn-radius btn-brd grd1 btn-block">LOGIN</button>
+<div class="all-title-box">
+    <div class="container text-center">
+        <h1>Login<span class="m_1">SmartEDU eğitim paneline giriş yapın.</span></h1>
+    </div>
+</div>
+
+<div id="login" class="section lb">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 offset-xl-3 col-md-10 offset-md-1 col-sm-12">
+                <div class="contact_form text-center"> <div class="section-title text-center">
+                        <h3 style="margin-bottom: 30px;">Giriş Yap</h3>
+                    </div>
+
+                    <% if (flashMessages.error) { %>
+                        <div class="alert alert-danger">
+                            <%= flashMessages.error %>
+                        </div>
+                    <% } %>
+
+                    <form id="loginform" name="loginform" method="POST" action="/users/login">
+                        <div class="row row-fluid">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <input type="email" name="email" id="email" class="form-control" placeholder="E-posta Adresiniz" required style="margin-bottom: 15px;">
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Şifreniz" required style="margin-bottom: 20px;">
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <button type="submit" id="submit" class="hover-btn-new log orange">
+                                    <span>GİRİŞ YAP</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4" style="padding-top: 20px;">
+                        <p>Hesabınız yok mu? <a href="/register" style="color: #eea412; font-weight: bold;">Kayıt Ol</a></p>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-</form>
-                    </div>
-                </div><!-- end col -->
-            </div><!-- end row -->
-        </div><!-- end container -->
-	 </div><!-- end container -->
-	   <%- include('partials/_footer');%>
+</div>
+
+<%- include('partials/_footer') %>

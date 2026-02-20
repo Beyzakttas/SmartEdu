@@ -4,11 +4,13 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const User = require('./models/User'); 
 const methodOverride = require('method-override');
+const fileUpload = require('express-fileupload'); // <-- 1. BURAYI EKLE
 
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
 const categoryRoute = require('./routes/categoryRoute');
 const userRoute = require('./routes/userRoute');
+const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const app = express();
 
@@ -24,7 +26,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-
+app.use(fileUpload());
+app.use(cookieParser());
 // ... diğer middleware'ler
 
 app.use(
@@ -54,13 +57,31 @@ app.use((req, res, next) => {
 });
 
 // 6. Global Variables & Role Check
+// 6. Global Variables & JWT/Session Sync
 app.use(async (req, res, next) => {
-  res.locals.userIN = req.session.userID;
+  // Hem session'dan hem de JWT çerezinden kullanıcı ID'sini kontrol et
+  const sessionUserID = req.session.userID;
+  const token = req.cookies.jwt;
   
-  if (req.session.userID) {
+  let currentUserID = sessionUserID;
+
+  // Eğer session yok ama JWT varsa, JWT içindeki ID'yi kullan (Senkronizasyon için)
+  if (!currentUserID && token) {
     try {
-      const user = await User.findById(req.session.userID);
-      res.locals.user = user;
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.verify(token, 'secret_key_buraya'); // authController'daki key ile aynı olmalı
+      currentUserID = decoded.userID;
+    } catch (err) {
+      currentUserID = null;
+    }
+  }
+
+  res.locals.userIN = currentUserID;
+
+  if (currentUserID) {
+    try {
+      const user = await User.findById(currentUserID);
+      res.locals.user = user; // Navbar bu değişkeni kullanıyor
     } catch (error) {
       res.locals.user = null;
     }

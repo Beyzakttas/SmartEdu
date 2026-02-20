@@ -1,18 +1,39 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 module.exports = async (req, res, next) => {
     try {
-        // req.session.userID var mı ve veritabanında bu kullanıcı hala mevcut mu?
-        const user = await User.findById(req.session.userID);
+        const token = req.cookies.jwt;
 
-        if (!user) {
+        if (token) {
+            jwt.verify(token, 'secret_key_buraya', async (err, decodedToken) => {
+                if (err) {
+                    // Token bozuksa her şeyi temizle
+                    res.clearCookie('jwt');
+                    res.locals.user = null; 
+                    return res.redirect('/login');
+                } else {
+                    const user = await User.findById(decodedToken.userID);
+                    
+                    if (!user) {
+                        res.clearCookie('jwt');
+                        res.locals.user = null;
+                        return res.redirect('/login');
+                    }
+
+                    // KRİTİK NOKTA: Kullanıcıyı hem request'e hem de EJS'ye tanıtıyoruz
+                    req.user = user;
+                    res.locals.user = user; // Artık Navbar <%= user %> üzerinden çalışacak
+                    next();
+                }
+            });
+        } else {
+            // Token yoksa Navbar'a kullanıcı olmadığını fısılda
+            res.locals.user = null;
             return res.redirect('/login');
         }
-
-        // Kullanıcı bulunduysa devam et
-        next();
     } catch (error) {
-        // Bir hata oluşursa (örneğin DB bağlantısı koparsa) login'e yönlendir
+        res.locals.user = null;
         res.redirect('/login');
     }
 };

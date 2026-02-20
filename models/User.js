@@ -12,9 +12,16 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  password: {
+ password: {
     type: String,
     required: true,
+    validate: {
+      validator: function(v) {
+        // En az 8 karakter VE en az bir özel karakter (Regex)
+        return /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(v);
+      },
+      message: props => `Şifre en az 8 karakter olmalı ve en az bir özel karakter içermelidir!`
+    }
   },
   role: {
     type: String,
