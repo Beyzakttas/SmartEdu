@@ -26,11 +26,15 @@
                                     <p><%= courses[i].description.substring(0,40) + "... "%></p>
                                 </div>
                             </div>
-                            <div class="course-meta-bot">
-                                <ul>
-                                    <li><i class="fa fa-user" aria-hidden="true"></i><%= courses[i].user.name %></li>
-                                </ul>
-                            </div>
+                          <div class="course-meta-bot">
+    <ul>
+        <li>
+            <i class="fa fa-user" aria-hidden="true" style="margin-right: 10px; color: #eea412;"></i>
+            
+            <span style="font-weight: 500;"><%= courses[i].user.name %></span>
+        </li>
+    </ul>
+</div>
                         </div>
                     </div>
                     <% } %>

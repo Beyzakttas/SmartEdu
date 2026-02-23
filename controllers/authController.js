@@ -35,7 +35,7 @@ exports.loginUser = async (req, res) => {
 
             if (isSame) {
                 // JWT Token Oluştur
-                const token = jwt.sign({ userID: user._id }, 'secret_key_buraya', {
+const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
                     expiresIn: '1d',
                 });
 
