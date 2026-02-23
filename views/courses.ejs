@@ -42,13 +42,22 @@
             </div>
 
             <div class="col-lg-3 col-12 right-single">
-               <div class="widget-search">
+           <div class="widget-search">
     <div class="site-search-area">
         <form method="GET" id="site-searchform" action="/courses">
             <div>
-                <input class="input-text form-control" name="search" id="search-k" placeholder="Search keywords..." type="text">
+                <input class="input-text form-control" 
+                       name="search" 
+                       id="search-k" 
+                       placeholder="Search keywords..." 
+                       type="text" 
+                       value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+                
                 <input id="searchsubmit" value="Search" type="submit">
             </div>
+        </form>
+    </div>
+</div>
         </form>
     </div>
 </div>

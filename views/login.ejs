@@ -2,7 +2,7 @@
 <%- include('partials/_navigation') %>
 
 <style>
-    /* Form kutusunu bembeyaz ve zarif yapar */
+    /* Form kutusu tasarımı */
     .contact_form {
         background-color: #ffffff !important;
         padding: 40px;
@@ -11,40 +11,68 @@
         border: 1px solid #f1f1f1;
     }
     
-    /* Butonun orijinal boyutları ve turuncu rengi */
-    .hover-btn-new.orange {
+    /* BUTONU SABİTLEME (Küçülme ve Büyümeyi Tamamen Durdurur) */
+    #loginform .hover-btn-new.log.orange {
+        /* Animasyonları sıfırla */
+        transition: none !important; 
+        transform: none !important;
+        animation: none !important;
+        
+        /* Boyutları Register ile eşitle ve kilitle */
+        padding: 12px 35px !important;
+        display: inline-block !important;
+        cursor: pointer;
         background: #eea412 !important;
         border: 1px solid #eea412 !important;
         color: #ffffff !important;
-        transition: all 0.3s ease;
-        padding: 10px 30px !important; /* Eski zarif boyut */
-        display: inline-block;
+        font-weight: 600 !important;
+        height: auto !important;
+        line-height: normal !important;
     }
 
-    /* Üzerine gelince siyah olma efekti */
-    .hover-btn-new.orange:hover {
+    /* Üzerine gelince sadece renk değişsin, hareket etmesin */
+    #loginform .hover-btn-new.log.orange:hover {
         background: #333333 !important;
         border-color: #333333 !important;
+        transform: none !important;
+    }
+
+    /* TIKLANDIĞINDA (Büyüme-Küçülme Buradaki Focus Yüzünden Oluyor) */
+    #loginform .hover-btn-new.log.orange:focus, 
+    #loginform .hover-btn-new.log.orange:active {
+        /* Tüm hareketleri ve efektleri zorla durdur */
+        transform: scale(1) !important;
+        transition: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        
+        /* Boyutun aynı kalmasını sağla */
+        padding: 12px 35px !important;
+        background-color: #eea412 !important;
         color: #ffffff !important;
     }
 
-    /* Arka plandaki koyuluğu temizler */
+    /* İçerideki span etiketinin oynamasını engelle */
+    #loginform .hover-btn-new span {
+        background-color: transparent !important;
+        display: inline-block !important;
+        transition: none !important;
+        transform: none !important;
+    }
+
     .section.lb {
         background-color: #fcfcfc !important;
     }
 </style>
 
-<div class="all-title-box">
-    <div class="container text-center">
-        <h1>Login<span class="m_1">SmartEDU eğitim paneline giriş yapın.</span></h1>
-    </div>
-</div>
+
 
 <div id="login" class="section lb">
     <div class="container">
         <div class="row">
             <div class="col-xl-6 offset-xl-3 col-md-10 offset-md-1 col-sm-12">
-                <div class="contact_form text-center"> <div class="section-title text-center">
+                <div class="contact_form text-center">
+                    <div class="section-title text-center">
                         <h3 style="margin-bottom: 30px;">Giriş Yap</h3>
                     </div>
 
@@ -63,7 +91,7 @@
                                 <input type="password" name="password" id="password" class="form-control" placeholder="Şifreniz" required style="margin-bottom: 20px;">
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <button type="submit" id="submit" class="hover-btn-new log orange">
+                                <button type="submit" id="submit" class="hover-btn-new log orange" onfocus="this.blur()" onmousedown="this.style.transform='none'">
                                     <span>GİRİŞ YAP</span>
                                 </button>
                             </div>

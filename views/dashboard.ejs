@@ -51,22 +51,14 @@
                 </div>
             <% } %>
 
-            <div class="row">
-                <div class="col-lg-12 blog-post-single">
-                    <div class="blog-author">
-                        <div class="author-bio">
-                            <h3 class="author_name">COURSES FROM: <%= user.name %></h3>
-                            <h5>Role: <span class="badge badge-warning text-white"><%= user.role %></span></h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <% if(user.role === 'student') { %>
-                <div class="row mt-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="mb-4">My Enrolled Courses</h2>
+                    </div>
                     <% for (let i=0; i < user.courses.length; i++) { %>
                     <div class="col-lg-6 col-md-6 col-12">
-                        <div class="course-item mb-5" style="border: 1px solid #4babb1; overflow: hidden;">
+                        <div class="course-item mb-5" style="border: 1px solid #4babb1; background:#fff;">
                             <div class="course-br" style="padding: 15px;">
                                 <div class="course-title">
                                     <h2 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -74,14 +66,14 @@
                                     </h2>
                                 </div>
                                 <div class="course-desc">
-                                    <p style="white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; display: block !important; width: 100% !important; word-break: break-all !important; margin-bottom: 15px;">
-                                        <%= user.courses[i].description.substring(0, 100) %>
+                                    <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 15px;">
+                                        <%= user.courses[i].description.substring(0, 100) %>...
                                     </p>
                                 </div>
                                 <form id="releaseForm-<%= user.courses[i]._id %>" method="POST" action="/courses/release">
                                     <input type="hidden" name="course_id" value="<%= user.courses[i]._id %>">
                                     <button type="button" class="btn btn-outline-danger" onclick="confirmRelease('<%= user.courses[i]._id %>')">
-                                        <span>RELEASE</span>
+                                        <span>RELEASE COURSE</span>
                                     </button>
                                 </form>
                             </div>
@@ -92,20 +84,19 @@
             <% } %>
 
             <% if(user.role === 'teacher') { %>
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-lg-12 text-center">
-                        <button class="btn btn-lg btn-warning rounded-0 text-white" data-toggle="modal" data-target="#addCourse">
+                        <button class="btn btn-warning rounded-0 text-white" data-toggle="modal" data-target="#addCourse">
                             <span>CREATE NEW COURSE</span>
                         </button>
                     </div>
                 </div>
-
-                <div class="row mt-5">
+                <div class="row">
                     <% for (let i=0; i < courses.length; i++) { %>
                     <div class="col-lg-6 col-md-6 col-12">
-                        <div class="course-item mb-5" style="border: 1px solid #4babb1; overflow: hidden;">
+                        <div class="course-item mb-5" style="border: 1px solid #4babb1; background:#fff;">
                             <div class="image-blog">
-                                <img src="<%= courses[i].image %>" alt="" class="img-fluid" style="height: 200px; width: 100%; object-fit: cover;">
+                                <img src="<%= courses[i].image %>" class="img-fluid" style="height: 200px; width: 100%; object-fit: cover;">
                             </div>
                             <div class="course-br" style="padding: 15px;">
                                 <div class="course-title">
@@ -114,23 +105,13 @@
                                     </h2>
                                 </div>
                                 <div class="course-desc">
-                                    <p style="white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; display: block !important; width: 100% !important; word-break: break-all !important; margin-bottom: 15px;">
-                                        <%= courses[i].description.substring(0, 100) %>
+                                    <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 15px;">
+                                        <%= courses[i].description.substring(0, 100) %>...
                                     </p>
                                 </div>
-                                <div class="clearfix">
-                                    <ul style="list-style-type: none; padding: 0;">
-                                      <li style="float: left;">
-                                          <button class="btn btn-primary rounded-0 text-white" data-toggle="modal" data-target="#updateCourse<%= courses[i]._id %>">
-                                              <span>UPDATE</span>
-                                          </button>
-                                      </li>
-                                      <li style="float: right;">
-                                          <a href="javascript:void(0)" onclick="confirmTeacherDelete('/courses/<%= courses[i].slug %>?_method=DELETE')" class="btn btn-danger rounded-0 text-white">
-                                              <span>DELETE</span>
-                                          </a>
-                                      </li>
-                                    </ul>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-primary rounded-0 text-white" data-toggle="modal" data-target="#updateCourse<%= courses[i]._id %>">UPDATE</button>
+                                    <a href="javascript:void(0)" onclick="confirmTeacherDelete('/courses/<%= courses[i].slug %>?_method=DELETE')" class="btn btn-danger rounded-0 text-white">DELETE</a>
                                 </div>
                             </div>
                         </div>
@@ -143,22 +124,15 @@
                                     <form method="POST" action="/courses/<%= courses[i].slug %>?_method=PUT" enctype="multipart/form-data">
                                         <div class="form-group"><input type="text" name="name" value="<%= courses[i].name %>" class="form-control" required></div>
                                         <div class="form-group"><textarea rows="5" name="description" class="form-control" required><%= courses[i].description %></textarea></div>
+                                        <div class="form-group"><input type="file" name="image" class="form-control-file"></div>
                                         <div class="form-group">
-                                            <label>Current Image:</label><br>
-                                            <img src="<%= courses[i].image %>" style="width: 100px; margin-bottom: 10px;">
-                                            <input type="file" name="image" class="form-control-file">
+                                            <select class="form-control" name="category">
+                                                <% for (let j=0; j < categories.length; j++) { %>
+                                                    <option value="<%= categories[j]._id %>" <%= String(categories[j]._id) === String(courses[i].category._id || courses[i].category) ? 'selected' : '' %>><%= categories[j].name %></option>
+                                                <% } %>
+                                            </select>
                                         </div>
-                                        <div class="form-group">
-                                         <select class="form-control" name="category">
-    <% for (let j=0; j < categories.length; j++) { %>
-        <option value="<%= categories[j]._id %>" 
-            <%= String(categories[j]._id) === String(courses[i].category._id || courses[i].category) ? 'selected' : '' %>>
-            <%= categories[j].name %>
-        </option>
-    <% } %>
-</select>
-                                        </div>
-                                        <button type="submit" class="btn btn-light btn-radius btn-brd grd1">SUBMIT CHANGES</button>
+                                        <button type="submit" class="btn btn-warning text-white btn-radius">SUBMIT CHANGES</button>
                                     </form>
                                 </div>
                             </div>
@@ -169,16 +143,21 @@
             <% } %>
 
             <% if(user.role === 'admin') { %>
-                <div class="row mt-5">
+                <div class="row mb-4">
+                    <div class="col-lg-12">
+                        <button class="btn btn-warning rounded-0 text-white" data-toggle="modal" data-target="#addUserModal">
+                            <i class="fa fa-user-plus"></i> <span>ADD NEW USER</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-12">
                         <h2 class="mb-3">Admin Panel: Users List</h2>
                         <table class="table table-hover border">
                             <thead style="background-color: #f8f9fa; border-bottom: 2px solid #eea412;">
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th class="text-right" style="padding-right: 20px;">Actions</th>
+                                    <th>Name</th><th>Email</th><th>Role</th><th class="text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,15 +166,9 @@
                                         <td><%= users[i].name %></td>
                                         <td><%= users[i].email %></td>
                                         <td><span class="badge badge-info"><%= users[i].role %></span></td>
-                                        <td class="text-right" style="padding-right: 20px;">
-                                            <button class="btn btn-primary btn-sm rounded-0 text-white" data-toggle="modal" data-target="#editUser<%= users[i]._id %>">
-                                                <span>UPDATE</span>
-                                            </button>
-                                            <a href="javascript:void(0)" 
-                                               onclick="confirmAdminDelete('/users/<%= users[i]._id %>?_method=DELETE', '<%= users[i].name %>')" 
-                                               class="btn btn-danger btn-sm rounded-0 text-white ml-1">
-                                               <span>DELETE</span>
-                                            </a>
+                                        <td class="text-right">
+                                            <button class="btn btn-primary btn-sm rounded-0 text-white" data-toggle="modal" data-target="#editUser<%= users[i]._id %>">UPDATE</button>
+                                            <a href="javascript:void(0)" onclick="confirmAdminDelete('/users/<%= users[i]._id %>?_method=DELETE', '<%= users[i].name %>')" class="btn btn-danger btn-sm rounded-0 text-white">DELETE</a>
                                         </td>
                                     </tr>
 
@@ -226,35 +199,46 @@
                     </div>
                 </div>
 
+                <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body customer-box">
+                                <h3 class="mb-4">Create New User</h3>
+                                <form method="POST" action="/users/admin-add-user">
+                                    <div class="form-group"><input type="text" name="name" class="form-control" placeholder="Full Name" required></div>
+                                    <div class="form-group"><input type="email" name="email" class="form-control" placeholder="Email Address" required></div>
+                                    <div class="form-group"><input type="password" name="password" class="form-control" placeholder="Password" required></div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="role">
+                                            <option value="student">Student</option>
+                                            <option value="teacher">Teacher</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning text-white btn-radius">CREATE USER</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row mt-5">
                     <div class="col-lg-12">
                         <h2 class="mb-3">Admin Panel: Categories List</h2>
-                        <button class="btn btn-warning rounded-0 text-white mb-3" data-toggle="modal" data-target="#addCategory">
-                            <span>ADD NEW CATEGORY</span>
-                        </button>
+                        <button class="btn btn-warning rounded-0 text-white mb-3" data-toggle="modal" data-target="#addCategory">ADD NEW CATEGORY</button>
                         <table class="table table-hover border">
                             <thead style="background-color: #f8f9fa; border-bottom: 2px solid #eea412;">
-                                <tr>
-                                    <th>Category Name</th>
-                                    <th class="text-right" style="padding-right: 20px;">Actions</th>
-                                </tr>
+                                <tr><th>Category Name</th><th class="text-right">Actions</th></tr>
                             </thead>
                             <tbody>
                                 <% for (let i=0; i < categories.length; i++) { %>
                                     <tr>
                                         <td><%= categories[i].name %></td>
-                                        <td class="text-right" style="padding-right: 20px;">
-                                            <button class="btn btn-primary btn-sm rounded-0 text-white" data-toggle="modal" data-target="#editCategory<%= categories[i]._id %>">
-                                                <span>UPDATE</span>
-                                            </button>
-                                            <a href="javascript:void(0)" 
-                                               onclick="confirmAdminDelete('/categories/<%= categories[i]._id %>?_method=DELETE', '<%= categories[i].name %>')" 
-                                               class="btn btn-danger btn-sm rounded-0 text-white ml-1">
-                                               <span>DELETE</span>
-                                            </a>
+                                        <td class="text-right">
+                                            <button class="btn btn-primary btn-sm rounded-0 text-white" data-toggle="modal" data-target="#editCategory<%= categories[i]._id %>">UPDATE</button>
+                                            <a href="javascript:void(0)" onclick="confirmAdminDelete('/categories/<%= categories[i]._id %>?_method=DELETE', '<%= categories[i].name %>')" class="btn btn-danger btn-sm rounded-0 text-white">DELETE</a>
                                         </td>
                                     </tr>
-
                                     <div class="modal fade" id="editCategory<%= categories[i]._id %>" tabindex="-1" role="dialog">
                                         <div class="modal-dialog modal-dialog-centered modal-lg">
                                             <div class="modal-content">
@@ -273,28 +257,16 @@
                         </table>
                     </div>
                 </div>
-
-                <div class="modal fade" id="addCategory" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-body customer-box">
-                                <h3 class="mb-4">Add New Category</h3>
-                                <form method="POST" action="/categories">
-                                    <div class="form-group">
-                                        <input type="text" name="name" class="form-control" placeholder="Category Name" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-warning text-white btn-radius">SUBMIT</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             <% } %>
 
-        </div></div><div class="modal fade" id="addCourse" tabindex="-1" role="dialog">
+        </div>
+    </div>
+
+    <div class="modal fade" id="addCourse" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-body customer-box">
+                    <h3 class="mb-4">Create New Course</h3>
                     <form method="POST" action="/courses" enctype="multipart/form-data">
                         <div class="form-group"><input type="text" name="name" class="form-control" placeholder="Course Name" required></div>
                         <div class="form-group"><textarea rows="5" name="description" class="form-control" placeholder="Description" required></textarea></div>
@@ -306,7 +278,21 @@
                                 <% } %>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-light btn-radius btn-brd grd1">CREATE</button>
+                        <button type="submit" class="btn btn-warning text-white btn-radius">CREATE</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addCategory" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body customer-box">
+                    <h3 class="mb-4">Add New Category</h3>
+                    <form method="POST" action="/categories">
+                        <div class="form-group"><input type="text" name="name" class="form-control" placeholder="Category Name" required></div>
+                        <button type="submit" class="btn btn-warning text-white btn-radius">SUBMIT</button>
                     </form>
                 </div>
             </div>
@@ -331,7 +317,11 @@ function confirmAdminDelete(deleteUrl, itemName) {
         cancelButtonText: 'Vazgeç'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = deleteUrl;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = deleteUrl;
+            document.body.appendChild(form);
+            form.submit();
         }
     })
 }
@@ -343,10 +333,15 @@ function confirmTeacherDelete(deleteUrl) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
-        confirmButtonText: 'Evet, sil!',
-        cancelButtonText: 'Vazgeç'
+        confirmButtonText: 'Evet, sil!'
     }).then((result) => {
-        if (result.isConfirmed) window.location.href = deleteUrl;
+        if (result.isConfirmed) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = deleteUrl;
+            document.body.appendChild(form);
+            form.submit();
+        }
     })
 }
 

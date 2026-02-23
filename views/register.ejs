@@ -1,38 +1,91 @@
 <%- include('partials/_header'); %>
 <%- include('partials/_navigation'); %>
 
+<style>
+    /* Register formunu Login ile aynı zarif çerçeve içine alır */
+    .register_form_container {
+        background-color: #ffffff !important;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 25px rgba(0,0,0,0.05);
+        border: 1px solid #f1f1f1;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    /* Sayfa arka planını hafif gri yaparak çerçeveyi ön plana çıkarır */
+    body {
+        background-color: #fcfcfc !important;
+    }
+
+    /* Inputlar arası boşluk */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Butonun büyümesini engelleyen ve Register ile eşitleyen stil */
+    .btn-custom-register {
+        background: #eea412 !important;
+        border: 1px solid #eea412 !important;
+        color: #ffffff !important;
+        padding: 12px 35px !important;
+        font-weight: 600 !important;
+        transition: none !important;
+        transform: none !important;
+        display: inline-block !important;
+    }
+
+    .btn-custom-register:focus, 
+    .btn-custom-register:active {
+        transform: scale(1) !important;
+        outline: none !important;
+        box-shadow: none !important;
+        background-color: #eea412 !important;
+    }
+</style>
+
 <div class="container">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h2 class="mt-5">Register</h2>
+        <div class="col-xl-6 offset-xl-3 col-md-10 offset-md-1 col-sm-12">
             
-            <form id="registerForm" method="POST" action="/users/signup">
-                <div class="form-group">
-                    <input type="text" name="name" class="form-control" placeholder="Full Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-                </div>
+            <div class="register_form_container text-center">
+                <h2 class="mb-4" style="font-weight: 700;">Register</h2>
                 
-                <div class="form-group">
-                    <select class="form-control" name="role">
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                    </select>
-                </div>
+                <form id="registerForm" method="POST" action="/users/signup">
+                    <div class="form-group">
+                        <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-control" name="role" style="height: 45px;">
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn btn-warning text-white btn-radius">REGISTER</button>
-            </form>
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-custom-register btn-radius" onfocus="this.blur()">
+                        REGISTER
+                    </button>
+                </form>
 
-        </div>
+                <div class="mt-4">
+                    <p>Already have an account? <a href="/login" style="color: #eea412; font-weight: bold;">Login</a></p>
+                </div>
+            </div>
+            </div>
     </div>
 </div>
 
 <%- include('partials/_footer'); %>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.getElementById('registerForm').addEventListener('submit', function(e) {
     const passwordField = document.getElementById('password');
@@ -42,15 +95,15 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
     if (!passwordRegex.test(password)) {
-        e.preventDefault(); // Formun gitmesini engelle (Veriler kutularda kalır)
+        e.preventDefault(); 
         
-        passwordField.value = ''; // Sadece şifreyi temizle
+        passwordField.value = ''; 
         passwordField.focus();
 
         Swal.fire({
             icon: 'error',
             title: 'Zayıf Şifre!',
-            text: 'Şifreniz en az 8 karakter olmalı ve özel karakter içermelidir.',
+            text: 'Şifreniz en az 8 karakter olmalı ve en az bir özel karakter içermelidir.',
             confirmButtonColor: '#eea412'
         });
     }

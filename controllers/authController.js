@@ -125,3 +125,14 @@ exports.updateUser = async (req, res) => {
         res.status(400).redirect('/users/dashboard');
     }
 };
+// controllers/authController.js
+exports.adminAddUser = async (req, res) => {
+    try {
+        await User.create(req.body);
+        req.flash("success", "User created successfully by Admin.");
+        res.status(201).redirect('/users/dashboard');
+    } catch (error) {
+        req.flash("error", "User could not be created! Maybe email already exists.");
+        res.status(400).redirect('/users/dashboard');
+    }
+};

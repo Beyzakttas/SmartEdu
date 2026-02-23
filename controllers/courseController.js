@@ -73,7 +73,6 @@ exports.updateCourse = async (req, res) => {
     }
 };
 // Diğer fonksiyonlar (getAllCourses, getCourse, enroll, release, delete) 
-// senin gönderdiğin şekilde kalabilir, onlar zaten doğru çalışıyor.
 exports.getAllCourses = async (req, res) => {
     try {
         const categorySlug = req.query.categories;
@@ -81,7 +80,6 @@ exports.getAllCourses = async (req, res) => {
         
         let filter = {};
 
-        // 1. Kategori Filtresi: Sadece kategori seçilmişse çalışsın
         if (categorySlug) {
             const category = await Category.findOne({ slug: categorySlug });
             if (category) {
@@ -89,22 +87,21 @@ exports.getAllCourses = async (req, res) => {
             }
         }
 
-        // 2. Arama Filtresi: Sadece arama yapılmışsa çalışsın
         if (query) {
-            // "i" seçeneği büyük/küçük harf duyarlılığını kaldırır
             filter.name = { $regex: query, $options: 'i' };
         }
 
         const courses = await Course.find(filter).sort('-createdAt').populate('user');
         const categories = await Category.find();
 
+        // DEĞİŞİKLİK BURADA: 'searchQuery: query' parametresini ekledik
         res.status(200).render('courses', {
             courses,
             categories,
             page_name: 'courses',
+            searchQuery: query // Arama terimini EJS'ye gönderiyoruz
         });
     } catch (error) {
-        // Hata durumunda konsola yazdır ki ne olduğunu görelim
         console.log("Filtreleme Hatası: ", error);
         res.status(400).redirect('/courses');
     }
